@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import get from '../src/utils/proxy';
+import get from '../src/utils/proxy.js';
 
 describe('Proxy', () => {
     it('should throw error when buffer is null', function () {

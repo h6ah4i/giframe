@@ -4,23 +4,14 @@
         <strong>GIFrame.js can extract the GIF's first frame without reading whole bytes in both browsers and NodeJS environments.</strong>
     </p>
     <p align="center">
-        <a href="https://travis-ci.org/alienzhou/giframe" target="_blank">
-            <img src="https://api.travis-ci.org/alienzhou/giframe.svg?branch=master" alt="Build status" />
+        <a href="https://github.com/h6ah4i/giframe/actions" target="_blank">
+            <img src="https://github.com/h6ah4i/giframe/actions/workflows/ci.yml/badge.svg" alt="Build status" />
         </a>
-        <a href="https://www.npmjs.com/package/giframe" target="_blank">
-            <img src="https://img.shields.io/npm/v/giframe.svg" alt="NPM version" />
-        </a>
-        <a href="https://coveralls.io/github/alienzhou/giframe" target="_blank">
-            <img src="https://coveralls.io/repos/github/alienzhou/giframe/badge.svg" alt="Coverage Status" />
-        </a>
-        <a href="https://unpkg.com/giframe" target="_blank">
-            <img src="https://img.badgesize.io/https://unpkg.com/giframe/dist/umd/giframe.js?compression=gzip" alt="Gzip size" />
-        </a>
-        <a href="https://codebeat.co/projects/github-com-alienzhou-giframe-master" target="_blank">
-            <img src="https://codebeat.co/badges/f2b1747e-3cd8-46a8-83e4-cda6ba8b3498" alt="Codebeat" />
+        <a href="https://coveralls.io/github/h6ah4i/giframe?branch=main" target="_blank">
+            <img src="https://coveralls.io/repos/github/h6ah4i/giframe/badge.svg?branch=main" alt="Coverage Status" />
         </a>
         <a href="https://opensource.org/licenses/mit-license.php" target="_blank">
-            <img src="https://img.shields.io/github/license/alienzhou/giframe" alt="MIT Licence" />
+            <img src="https://img.shields.io/github/license/h6ah4i/giframe" alt="MIT Licence" />
         </a>
     </p>
 </div>

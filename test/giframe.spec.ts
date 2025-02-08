@@ -2,8 +2,12 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import fs from 'fs-extra';
 import path from 'path';
-import GIFrame from '../src/giframe';
-import { writeTempImage, diffImage, cleanTempDir } from './utils';
+import { fileURLToPath } from 'url';
+import GIFrame from '../src/giframe.js';
+import { writeTempImage, diffImage, cleanTempDir } from './utils.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const GIF_PATH = path.resolve(__dirname, 'img', '1.gif');
 const LARGE_GIF_PATH = path.resolve(__dirname, 'img', '3.gif');
@@ -21,10 +25,10 @@ describe('Giframe', function () {
         const buf = fs.readFileSync(GIF_PATH);
         const giframe = new GIFrame();
 
-        giframe.feed(buf.slice(0, 50));
+        giframe.feed(buf.subarray(0, 50));
         expect(giframe.bufferLength).to.be.equal(50);
 
-        giframe.feed(buf.slice(50, 72));
+        giframe.feed(buf.subarray(50, 72));
         expect(giframe.bufferLength).to.be.equal(72);
     });
 
@@ -87,7 +91,7 @@ describe('Giframe', function () {
 
             const giframe = new GIFrame(0, { usePNG: true });
             giframe.on(GIFrame.event.PIXEL, () => stream.close());
-            stream.on('data', chunk => {
+            stream.on('data', (chunk: Buffer) => {
                 giframe.feed(chunk);
             });
 
@@ -133,27 +137,27 @@ describe('Giframe', function () {
         });
 
         it('should throw an error when the very first chunk is shorter than needed', () => {
-            const feed = () => giframe.feed(buf.slice(0, 20));
+            const feed = () => giframe.feed(buf.subarray(0, 20));
             expect(feed).to.be.throw(/out of range/i);
         });
 
         it('should only trigger \'INIT\' event', () => {
-            giframe.feed(buf.slice(0, 50));
+            giframe.feed(buf.subarray(0, 50));
 
             check([true, false, false, false, false]);
         });
 
         it('should trigger all events except \'ALREADY\'', () => {
-            giframe.feed(buf.slice(0, 50));
-            giframe.feed(buf.slice(50, 85));
+            giframe.feed(buf.subarray(0, 50));
+            giframe.feed(buf.subarray(50, 85));
 
             check([true, true, true, true, false]);
         });
 
         it('should trigger all events', () => {
-            giframe.feed(buf.slice(0, 50));
-            giframe.feed(buf.slice(50, 85));
-            giframe.feed(buf.slice(85, 100));
+            giframe.feed(buf.subarray(0, 50));
+            giframe.feed(buf.subarray(50, 85));
+            giframe.feed(buf.subarray(85, 100));
 
             check([true, true, true, true, true]);
         });
@@ -182,11 +186,11 @@ describe('Giframe', function () {
         });
 
         it('should not process when locked', () => {
-            giframe.feed(buf.slice(0, 50));
+            giframe.feed(buf.subarray(0, 50));
             check([true, false, false, false, false]);
 
             giframe.lock();
-            giframe.feed(buf.slice(50, 100));
+            giframe.feed(buf.subarray(50, 100));
             check([true, false, false, false, false]);
             expect(giframe.bufferLength).to.be.equal(50);
         });

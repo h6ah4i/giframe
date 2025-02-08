@@ -1,24 +1,30 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "removeComments": true,
         "preserveConstEnums": true,
         "noImplicitAny": false,
         "sourceMap": false,
         "outDir": "dist/node",
-        "target": "ES6",
+        "target": "ES2020",
         "esModuleInterop": true,
         "downlevelIteration": true,
-        "suppressImplicitAnyIndexErrors": true,
         "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "allowJs": true,
         "lib": [
             "DOM",
-            "ES5",
+            "ES2020",
             "ScriptHost"
         ]
     },
     "include": [
         "src/**/*",
-        "rollup.config.ts"
-    ]
+        "test/**/*"
+    ],
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifiers": true
+    }
 }

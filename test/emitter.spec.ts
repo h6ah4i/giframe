@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import { expect } from 'chai';
-import EventEmitter from '../src/utils/event.emitter';
+import EventEmitter from '../src/utils/event.emitter.js';
 
 describe('Event Emitter', () => {
     it('should trigger the listener once when emitted', function () {

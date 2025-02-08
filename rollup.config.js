@@ -1,11 +1,18 @@
 import path from 'path';
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
-import resolve from 'rollup-plugin-node-resolve'; // resolve external packages
-import typescript from 'rollup-plugin-typescript2'; // notice ts version (https://github.com/ezolenko/rollup-plugin-typescript2/issues/88)
+import { babel } from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import typescript from 'rollup-plugin-typescript2';
 import strip from '@rollup/plugin-strip';
-import { terser } from "rollup-plugin-terser";
-import pkg from './package.json';
+import terser from "@rollup/plugin-terser";
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json');
 
 const ROOT_DIR = __dirname;
 const BANNER = `/** GIFrame.js v${pkg.version}, repo: https://github.com/alienzhou/giframe, MIT licence */`;
@@ -16,20 +23,24 @@ export default [{
         typescript({
             tsconfigOverride: {
                 compilerOptions: {
-                    module: 'ES2015',
+                    module: 'ES2020',
+                    moduleResolution: 'Node',
                     target: 'ES5'
                 }
             }
         }),
-        resolve({
+        nodeResolve({
             mainFields: ['module', 'main'],
             browser: true
         }),
         commonjs(),
         strip(),
-        babel({ runtimeHelpers: true }),
+        babel({
+            babelHelpers: 'runtime',
+            extensions: ['.ts']
+        }),
         terser({
-            output: {
+            format: {
                 comments: /GIFrame.js/,
             }
         })
@@ -50,11 +61,12 @@ export default [{
         typescript({
             tsconfigOverride: {
                 compilerOptions: {
-                    module: 'ES2015'
+                    module: 'ES2020',
+                    moduleResolution: 'Node'
                 }
             }
         }),
-        resolve({
+        nodeResolve({
             mainFields: ['module', 'main'],
             browser: true
         }),
@@ -64,7 +76,7 @@ export default [{
             compress: false,
             mangle: false,
             module: true,
-            output: {
+            format: {
                 beautify: true,
                 comments: /GIFrame.js/,
                 braces: true

@@ -1,8 +1,12 @@
 import { expect } from 'chai';
-import Decoder from '../src/decoder';
+import Decoder from '../src/decoder/index.js';
 import fs from 'fs-extra';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import flattenDeep from 'lodash.flattendeep';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const BASE64 = 'R0lGODlhAgACAPAAAP8AACDfACH5BAAyAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAAgACAAACAgxcACH5BAAyAAAALAAAAAACAAIAAAICRFwAOw==';
 
@@ -33,7 +37,7 @@ describe('Decoder', () => {
         ]);
         const d: Decoder = new Decoder(buf);
         d.lastError = null;
-        d.decodeMetaAndFrameInfo(buf.slice(1, buffer.length), 0);
+        d.decodeMetaAndFrameInfo(buf.subarray(1, buffer.length), 0);
         expect(d.lastError.message).to.include('Unknown gif block');
     });
 
@@ -73,8 +77,8 @@ describe('Decoder', () => {
     });
 
     it('should decode correctly when chunks are divided and input many times', () => {
-        const decoder = new Decoder(buffer.slice(0, 40));
-        const decodeFrame = (end: number): boolean => decoder.decodeMetaAndFrameInfo(buffer.slice(0, end), 0);
+        const decoder = new Decoder(buffer.subarray(0, 40));
+        const decodeFrame = (end: number): boolean => decoder.decodeMetaAndFrameInfo(buffer.subarray(0, end), 0);
 
         expect(decodeFrame(50), '50 bytes are not enough').to.be.false;
         expect(decoder.getFramesNum()).to.be.equal(0);
@@ -90,7 +94,7 @@ describe('Decoder', () => {
             const decoder = new Decoder(buffer);
             decoder.decodeMetaAndFrameInfo(buffer, 0);
 
-            const pixels = decoder.decodeFrameRGBA(0, buffer.slice(0, 70));
+            const pixels = decoder.decodeFrameRGBA(0, buffer.subarray(0, 70));
             expect(pixels).to.be.deep.equal([
                 32, 223, 0, 255,
                 255, 0, 0, 255,
@@ -100,12 +104,12 @@ describe('Decoder', () => {
         });
 
         it('should be correctly when chunks are divided and input many times', () => {
-            const decoder = new Decoder(buffer.slice(0, 40));
-            decoder.decodeMetaAndFrameInfo(buffer.slice(0, 50), 0);
-            decoder.decodeMetaAndFrameInfo(buffer.slice(0, 60), 0);
-            decoder.decodeMetaAndFrameInfo(buffer.slice(0, 70), 0);
+            const decoder = new Decoder(buffer.subarray(0, 40));
+            decoder.decodeMetaAndFrameInfo(buffer.subarray(0, 50), 0);
+            decoder.decodeMetaAndFrameInfo(buffer.subarray(0, 60), 0);
+            decoder.decodeMetaAndFrameInfo(buffer.subarray(0, 70), 0);
 
-            const pixels = decoder.decodeFrameRGBA(0, buffer.slice(0, 70));
+            const pixels = decoder.decodeFrameRGBA(0, buffer.subarray(0, 70));
             expect(pixels).to.be.deep.equal([
                 32, 223, 0, 255,
                 255, 0, 0, 255,
@@ -119,8 +123,8 @@ describe('Decoder', () => {
                 return list.map(item => () => {
                     const buf = buffer = Buffer.from(BASE64, 'base64');
                     buf[item[0]] = item[1];
-                    const decoder = new Decoder(buf.slice(0, 40));
-                    decoder.decodeMetaAndFrameInfo(buf.slice(0, 50), 0);
+                    const decoder = new Decoder(buf.subarray(0, 40));
+                    decoder.decodeMetaAndFrameInfo(buf.subarray(0, 50), 0);
                 });
             };
             genBreak([[28, 0xfe], [28, 0x01], [28, 0xaa], [40, 0x00]])
@@ -130,13 +134,13 @@ describe('Decoder', () => {
         it('should be correctly from a GIF file', async () => {
             let offset = 40;
             const buf = fs.readFileSync(path.resolve(__dirname, 'img', '1.gif'));
-            const decoder = new Decoder(buf.slice(0, offset));
-            while (!decoder.decodeMetaAndFrameInfo(buf.slice(0, offset), 0)) {
+            const decoder = new Decoder(buf.subarray(0, offset));
+            while (!decoder.decodeMetaAndFrameInfo(buf.subarray(0, offset), 0)) {
                 offset += 10;
             }
 
             let pixels: Array<number> = null;
-            while (!(pixels = decoder.decodeFrameRGBA(0, buf.slice(0, offset)))) {
+            while (!(pixels = decoder.decodeFrameRGBA(0, buf.subarray(0, offset)))) {
                 offset += 10;
             }
 

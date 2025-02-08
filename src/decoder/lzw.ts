@@ -1,5 +1,5 @@
-import { OutputLZWMsg } from '../types';
-import get from '../utils/proxy';
+import { OutputLZWMsg } from '../types/index.js';
+import get from '../utils/proxy.js';
 
 export interface IOutputLZW {
     output: Uint8Array;

@@ -1,6 +1,5 @@
 # npm
 node_modules
-package-lock.json
 
 # example output
 example/output
@@ -14,4 +13,3 @@ dist
 
 # test
 coverage
-.nyc_output

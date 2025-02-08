@@ -3,9 +3,13 @@ import fs from 'fs-extra';
 import path from 'path';
 import opn from 'better-opn';
 import Throttle from 'throttle-stream';
+import { fileURLToPath } from 'url';
 
-const port: number = parseInt(process.env.PORT, 10) || 8080;
-const speed: number = isNaN(parseInt(process.env.SPEED, 10)) ? 250 : parseInt(process.env.SPEED, 10);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const port: number = parseInt(process.env.PORT ?? '8080', 10);
+const speed: number = parseInt(process.env.SPEED ?? '250', 10);
 const interval: number = 25;
 const publicDir = path.resolve(__dirname, 'public');
 

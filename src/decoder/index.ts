@@ -2,9 +2,9 @@
  * a GIF decoder, support stream-like decoding
  * folk from omggif
  */
-import { IFrameInfo } from '../types';
-import { unpackLZW } from './lzw';
-import get from '../utils/proxy';
+import { IFrameInfo } from '../types/index.js';
+import { unpackLZW } from './lzw.js';
+import get from '../utils/proxy.js';
 
 class Decoder {
     private pos: number;
@@ -311,6 +311,7 @@ class Decoder {
             return pixels;
         }
         catch (e) {
+            console.error('Failed to decode frame:', e);
             return null;
         }
     };

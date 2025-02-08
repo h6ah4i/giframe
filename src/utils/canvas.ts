@@ -1,5 +1,5 @@
 import { createCanvas, Canvas } from 'canvas';
-import { ICreateBase64Opts } from '../types';
+import { ICreateBase64Opts } from '../types/index.js';
 
 enum MineType {
     JPG = 'image/jpeg',

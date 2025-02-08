@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { unpackLZW } from '../src/decoder/lzw';
-import { OutputLZWMsg } from '../src/types';
+import { unpackLZW } from '../src/decoder/lzw.js';
+import { OutputLZWMsg } from '../src/types/index.js';
 
 describe('LZW', () => {
     it('should unpack correctly', () => {

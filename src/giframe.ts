@@ -1,7 +1,7 @@
-import { IFrameInfo, ICreateBase64Opts } from './types';
-import Decoder from './decoder';
-import EventEmitter from './utils/event.emitter';
-import createBase64 from './utils/canvas';
+import { IFrameInfo, ICreateBase64Opts } from './types/index.js';
+import Decoder from './decoder/index.js';
+import EventEmitter from './utils/event.emitter.js';
+import createBase64 from './utils/canvas.js';
 
 enum Stage {
     NONE = 'none',
@@ -16,7 +16,7 @@ type EmitData = Array<number>|string|IFrameInfo;
 interface IDeferred<Ret> {
     promise: Promise<Ret>;
     resolve: (data: Ret) => unknown;
-    reject: Function;
+    reject: (error: Error) => void;
 }
 interface IGIFrameOpts {
     usePNG: boolean;
@@ -53,7 +53,7 @@ class GIFrame extends EventEmitter<EmitData> {
             this.opts = Object.create(DEFAULT_OPTS);
         }
         let resolve: (data: string) => unknown;
-        let reject: Function;
+        let reject: (error: Error) => void;
         const promise: Promise<string> = new Promise((r, j) => (resolve = r, reject = j));
         this.deferred = { promise, resolve, reject };
     }

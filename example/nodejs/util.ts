@@ -1,7 +1,11 @@
 import fs from 'fs-extra';
 import path from 'path';
-import ora from 'ora';
-import GIFrame from '../../src/giframe';
+import ora, { Ora } from 'ora';
+import { fileURLToPath } from 'url';
+import GIFrame from '../../src/giframe.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 type SpinFn = (text?: string, error?: Error) => number;
 const examplePath: string = path.resolve(__dirname, '..');
@@ -10,14 +14,14 @@ export function addPrintFlow(giframe: GIFrame, filename: string, totalPromise: P
 
     function createSpin(text: string): SpinFn {
         let startTime: number = +(new Date);
-        let spinner: ora.Ora = ora(text).start();
+        let spinner: Ora = ora(text).start();
         let formerText: string = text;
 
         const spin: SpinFn = function (text?: string, error?: Error): number {
             const now: number = +(new Date);
             const cost: number = now - startTime;
             startTime = now;
-    
+
             if (error) {
                 spinner.fail(`${formerText} - failed!`);
                 console.log(error);
@@ -25,12 +29,12 @@ export function addPrintFlow(giframe: GIFrame, filename: string, totalPromise: P
             else {
                 spinner.succeed(`${formerText} - ${cost}ms`);
             }
-    
+
             if (text) {
                 spinner = ora(text).start();
                 formerText = text;
             }
-    
+
             return cost;
         }
 
@@ -62,7 +66,7 @@ export function addPrintFlow(giframe: GIFrame, filename: string, totalPromise: P
         const buffer = Buffer.from(data, 'base64');
         fs.outputFile(outputPath, buffer, function (err) {
             if (err) {
-                spin(null, err);
+                spin(undefined, err);
                 return;
             }
             spin();

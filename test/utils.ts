@@ -2,6 +2,10 @@ import fs from 'fs-extra';
 import path from 'path';
 import sharp from 'sharp';
 import pixelmatch from 'pixelmatch';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const TEMP_DIR = path.resolve(__dirname, 'tmp');
 export function writeTempImage(base64: string): Promise<string> {

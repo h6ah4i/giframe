@@ -1,10 +1,12 @@
 import {expect} from 'chai';
 import path from 'path';
-import { getMeta, getRGBAPixels, diffImage, writeTempImage, cleanTempDir } from './utils';
-import fileType from 'file-type';
-import core from 'file-type/core';
-import createBase64 from '../src/utils/canvas';
+import { fileURLToPath } from 'url';
+import { getMeta, getRGBAPixels, diffImage, writeTempImage, cleanTempDir } from './utils.js';
+import { fileTypeFromBuffer } from 'file-type';
+import createBase64 from '../src/utils/canvas.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe('Node Canvas', () => {
     const samplePixels: Array<number> = [];
@@ -46,7 +48,7 @@ describe('Node Canvas', () => {
 
         it('should have the correct mine type', async function () {
             const data: string = base64.replace(/^data:image\/\w+;base64,/, '');
-            const type: core.FileTypeResult = await fileType.fromBuffer(Buffer.from(data, 'base64'))
+            const type = await fileTypeFromBuffer(Buffer.from(data, 'base64'));
             expect(type.mime).to.be.equal('image/jpeg');
         });
 
@@ -87,7 +89,7 @@ describe('Node Canvas', () => {
 
         it('should have the correct mine type', async function () {
             const data: string = base64.replace(/^data:image\/\w+;base64,/, '');
-            const type: core.FileTypeResult = await fileType.fromBuffer(Buffer.from(data, 'base64'))
+            const type = await fileTypeFromBuffer(Buffer.from(data, 'base64'));
             expect(type.mime).to.be.equal('image/png');
         });
 
